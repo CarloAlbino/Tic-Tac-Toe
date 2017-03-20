@@ -107,21 +107,29 @@ public class TicTacTowText : MonoBehaviour {
         ComputerMove(board);
     }
 
+    public Sprite x;
+    public Sprite o;
+    public Sprite empty;
+    public Image[] imageBoard;
+
     private void PrintBoard()
     {
         for(int i = 0; i < board.Length; i++)
         {
             if(board[i] == -1)
             {
-                buttonText[i].text = "X";
+                //buttonText[i].text = "X";
+                imageBoard[i].sprite = x;
             }
             else if(board[i] == 1)
             {
-                buttonText[i].text = "O";
+                //buttonText[i].text = "O";
+                imageBoard[i].sprite = o;
             }
             else
             {
-                buttonText[i].text = "";
+                //buttonText[i].text = "";
+                imageBoard[i].sprite = empty;
             }
         }
     }
