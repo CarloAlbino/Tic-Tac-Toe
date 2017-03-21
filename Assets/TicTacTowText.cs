@@ -8,6 +8,7 @@ public class TicTacTowText : MonoBehaviour {
     public Text[] buttonText;
     private int[] board = { 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private bool canPlay = true;
+    private int turn = 0;
 	// Use this for initialization
 	void Start () {
         PrintBoard();
@@ -66,28 +67,47 @@ public class TicTacTowText : MonoBehaviour {
 
     void ComputerMove(int[] board)
     {
-        int move = -1;
-        int score = -2;
-
-        for(int i = 0; i < board.Length; ++i)
+        int random3rdTurn = 1;
+        if (turn == 3)
+            random3rdTurn = Random.Range(0, 100);
+        if (turn == 0 || random3rdTurn %2 == 0)
         {
-            if(board[i] == 0)
+            print("Playing random move");
+            int randomMove;
+            do
             {
-                board[i] = 1;
-                int tempScore = -MiniMax(board, -1);
-                board[i] = 0;
-                if(tempScore > score)
+                randomMove = Random.Range(0, 8);
+                print(randomMove);
+            } while (board[randomMove] != 0);
+            board[randomMove] = 1;
+            PrintBoard();
+        }
+        else
+        {
+            int move = -1;
+            int score = -2;
+
+            for (int i = 0; i < board.Length; ++i)
+            {
+                if (board[i] == 0)
                 {
-                    score = tempScore;
-                    move = i;
+                    board[i] = 1;
+                    int tempScore = -MiniMax(board, -1);
+                    board[i] = 0;
+                    if (tempScore > score)
+                    {
+                        score = tempScore;
+                        move = i;
+                    }
                 }
             }
-        }
 
-        // returns a score based on minimax tree at a given node
-        board[move] = 1;
-        PrintBoard();
+            // returns a score based on minimax tree at a given node
+            board[move] = 1;
+            PrintBoard();
+        }
         canPlay = true;
+        turn++;
     }
 
     public void PlayerMove(int pos)
@@ -103,7 +123,7 @@ public class TicTacTowText : MonoBehaviour {
 
     private IEnumerator PlayComputer()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         ComputerMove(board);
     }
 
