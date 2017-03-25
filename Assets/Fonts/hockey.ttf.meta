@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 327eab5a8fc7d9b4abd8a94464046638
+timeCreated: 1490447605
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Hockey is Lif
+  fontNames:
+  - Hockey is Lif
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
