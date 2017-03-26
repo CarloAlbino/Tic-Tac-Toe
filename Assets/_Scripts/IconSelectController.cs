@@ -17,27 +17,40 @@ public class IconSelectController : MonoBehaviour {
     [SerializeField]
     private Text m_feedbackText;
 
+    [SerializeField]
+    private GameObject m_iconSelectCanvas, m_gameController;
+    [SerializeField]
+    private ScoreBoardController m_scoreController;
+
     private bool m_canStartGame = false;
     private bool m_playerIsSelecting = true;
 
 	void Update ()
     {
-		if(m_canStartGame)
+        if (DataController.Instance.newGame)
         {
-            m_playButton.interactable = true;
-            m_feedbackText.text = "Click [START] to start the game";
-        }
-        else
-        {
-            m_playButton.interactable = false;
-            if (m_playerIsSelecting)
+            if (m_canStartGame)
             {
-                m_feedbackText.text = "Select your icon";
+                m_playButton.interactable = true;
+                m_feedbackText.text = "Click [START] to start the game";
             }
             else
             {
-                m_feedbackText.text = "Select the CPU's icon";
+                m_playButton.interactable = false;
+                if (m_playerIsSelecting)
+                {
+                    m_feedbackText.text = "Select your icon";
+                }
+                else
+                {
+                    m_feedbackText.text = "Select the CPU's icon";
+                }
             }
+        }
+        else
+        {
+            m_canStartGame = true;
+            _Select_StartGame();
         }
 	}
 
@@ -75,6 +88,10 @@ public class IconSelectController : MonoBehaviour {
         if(m_canStartGame)
         {
             // Start the game
+            m_gameController.SetActive(true);
+            m_scoreController.gameObject.SetActive(true);
+            m_scoreController.StartGame();
+            m_iconSelectCanvas.SetActive(false);
         }
     }
 }

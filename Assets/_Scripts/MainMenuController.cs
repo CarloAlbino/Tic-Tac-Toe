@@ -11,7 +11,7 @@ public class MainMenuController : MonoBehaviour {
     public void _Menu_NewGame()
     {
         // Flag to go to icon selection before game begins
-        DataController.Instance.LoadGame(false);
+        DataController.Instance.LoadGame(true);
         // Load game scene
         SceneManager.LoadScene(m_gameLevelIndex);
     }
@@ -19,7 +19,7 @@ public class MainMenuController : MonoBehaviour {
     public void _Menu_LoadGame()
     {
         // Load data first
-        DataController.Instance.LoadGame(true);
+        DataController.Instance.LoadGame(false);
         // Load game scene
         SceneManager.LoadScene(m_gameLevelIndex);
     }
