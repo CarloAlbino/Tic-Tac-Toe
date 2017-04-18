@@ -49,35 +49,38 @@ public class GameController : MonoBehaviour {
 
     public void _Game_PlayerMove(int pos)
     {
-        if (m_board[pos] == 0)
+        if (m_canPlay)
         {
-            m_board[pos] = -1;
-            PrintBoard();
-            m_canPlay = false;
-            DataController.Instance.isPlayerTurn = false;
-            m_scoreBoard.UpdateTurn();
-            // Check for win
-            if (Win(m_board) == 0)
+            if (m_board[pos] == 0)
             {
-                bool isDraw = CheckForDraw();
-                if (!isDraw)
+                m_board[pos] = -1;
+                PrintBoard();
+                m_canPlay = false;
+                DataController.Instance.isPlayerTurn = false;
+                m_scoreBoard.UpdateTurn();
+                // Check for win
+                if (Win(m_board) == 0)
                 {
-                    // Game not over
-                    // Continue game
-                    StartCoroutine(PlayComputer());
+                    bool isDraw = CheckForDraw();
+                    if (!isDraw)
+                    {
+                        // Game not over
+                        // Continue game
+                        StartCoroutine(PlayComputer());
+                    }
+                    else
+                    {
+                        // Draw
+                        m_scoreBoard.ShowGameOverDisplay(0);
+                        DataController.Instance.draws += 1;
+                    }
                 }
                 else
                 {
-                    // Draw
-                    m_scoreBoard.ShowGameOverDisplay(0);
-                    DataController.Instance.draws += 1;
+                    // Game over, player wins
+                    m_scoreBoard.ShowGameOverDisplay(1);
+                    DataController.Instance.wins += 1;
                 }
-            }
-            else
-            {
-                // Game over, player wins
-                m_scoreBoard.ShowGameOverDisplay(1);
-                DataController.Instance.wins += 1;
             }
         }
     }
@@ -149,17 +152,21 @@ public class GameController : MonoBehaviour {
 
     private void ComputerMove(int[] board)
     {
-        int random3rdTurn = 1;
-        if (m_turn == 3)
-            random3rdTurn = Random.Range(0, 100);
-        if (m_turn == 0 || random3rdTurn % 2 == 0)
+        //int random3rdTurn = 1;
+        //if (m_turn == 3)
+        //{
+        //    random3rdTurn = Random.Range(0, 100);
+        //    Debug.Log("THIRD TURN: " + random3rdTurn);
+        //}
+        //if (m_turn == 0 || random3rdTurn % 2 == 0)
+        if (m_turn == 3 && Random.Range(0, 1000) < 150)  // 15% chance of a random move on 3rd turn
         {
             print("Playing random move");
             int randomMove;
             do
             {
                 randomMove = Random.Range(0, 8);
-                print(randomMove);
+                //print(randomMove);
             } while (board[randomMove] != 0);
             board[randomMove] = 1;
             PrintBoard();
@@ -187,7 +194,7 @@ public class GameController : MonoBehaviour {
             // returns a score based on minimax tree at a given node
             board[move] = 1;
             PrintBoard();
-        }
+    }
 
         // Check for win
         if (Win(board) == 0)
@@ -198,7 +205,6 @@ public class GameController : MonoBehaviour {
                 // Game not over
                 // Continue game
                 m_canPlay = true;
-                m_turn++;
                 DataController.Instance.isPlayerTurn = true;
                 m_scoreBoard.UpdateTurn();
             }
@@ -215,6 +221,9 @@ public class GameController : MonoBehaviour {
             m_scoreBoard.ShowGameOverDisplay(-1);
             DataController.Instance.loses += 1;
         }
+
+        m_turn++;
+        Debug.Log("Turn: " + m_turn);
     }
 
     private IEnumerator PlayComputer()
